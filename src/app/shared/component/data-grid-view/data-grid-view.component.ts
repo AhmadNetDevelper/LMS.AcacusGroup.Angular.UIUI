@@ -1,0 +1,198 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject } from 'rxjs';
+import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { ActionRowGrid, DynamicColumn, State } from 'src/app/shared/services/CommonMemmber';
+
+@Component({
+  selector: 'app-data-grid-view',
+  templateUrl: './data-grid-view.component.html',
+  styleUrls: ['./data-grid-view.component.scss']
+})
+export class DataGridViewComponent implements OnInit, AfterViewInit {
+
+  @Input() gridDataSource: MatTableDataSource<any>;
+    @Input() displayedColumns: string[];
+    // tslint:disable-next-line:no-output-on-prefix
+    @Output() onEditRow = new BehaviorSubject<ActionRowGrid>({
+        type: State.Non,
+        row: '',
+    });
+    // tslint:disable-next-line:no-output-on-prefix
+    @Output() onDeleteRow = new BehaviorSubject<ActionRowGrid>({
+        type: State.Non,
+        row: '',
+    });
+    // tslint:disable-next-line:no-output-on-prefix
+    @Output() onPagination = new BehaviorSubject<ActionRowGrid>({
+        type: State.Non,
+        row: '',
+    });
+    // tslint:disable-next-line:no-output-on-prefix
+    @Output() onCheckRow = new BehaviorSubject<ActionRowGrid>({
+        type: State.Non,
+        row: '',
+    });
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @Input() lengthData: number;
+    @Input() PaginatorIndex: number;
+    @Input() additionalColumns: DynamicColumn[] = [];
+    @Input() isShowMainActionControls = true;
+    @Input() isShowBoxSelectAll = false;
+    @Output() onInStatusRow = new BehaviorSubject<ActionRowGrid>({
+        type: State.Non,
+        row: '',
+    });
+    pageIndex = 1;
+    pageSize = 10;
+    selection = new SelectionModel<any>(true, []);
+    rowsSelection = [];
+
+    constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
+    ngOnInit(): void {}
+
+    ngAfterViewInit(): void {
+        this.gridDataSource.sort = this.sort;
+    }
+
+    onEditClick(rowClicked : any) {
+        const actionGrid: ActionRowGrid = { type: State.Edit, row: rowClicked };
+        this.onEditRow.next(actionGrid);
+    }
+
+    onDeleteClick(rowClicked : any) {
+        const actionGrid: ActionRowGrid = {
+            type: State.Delete,
+            row: rowClicked,
+        };
+        this.onDeleteRow.next(actionGrid);
+    }
+
+    onPaginationClick(event : any) {
+        event.pageIndex += 1;
+        const PaginationGrid: ActionRowGrid = {
+            type: State.Pagination,
+            row: event,
+        };
+        this.onPagination.next(PaginationGrid);
+    }
+
+    onStatusClick(rowClicked : any, state: State) {
+        const actionGrid: ActionRowGrid = { type: state, row: rowClicked };
+        this.onInStatusRow.next(actionGrid);
+    }
+
+    getDisplayColumns() {
+        const selectionLastColumn = this.isShowBoxSelectAll
+            ? 'Selection'
+            : 'Actions';
+
+        if (!this.isShowMainActionControls && !this.isShowBoxSelectAll) {
+            return this.displayedColumns.concat(
+                ...this.additionalColumns.map((e) => e.headerName),
+            );
+        }
+        return this.displayedColumns
+            .concat(...this.additionalColumns.map((e) => e.headerName))
+            .concat(...[`${selectionLastColumn}`]);
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.gridDataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    //Selects all rows if they are not all selected; otherwise clear selection.
+    masterToggle() {
+        if (this.isAllSelected()) {
+            this.selection.clear();
+            //deleting elements from (rowsSelection) array.
+            this.onSelectedRow(this.gridDataSource.data, false, false);
+        } else {
+            this.gridDataSource.data.forEach((row) => {
+                this.selection.select(row);
+            });
+            //Adding elements selected from source to destination
+            this.onSelectedRow(this.gridDataSource.data, false, true);
+        }
+    }
+
+    onSelectedRow(row : any, isCheckedRow: boolean, isCheckedAll: boolean) {
+        if (isCheckedAll) {
+            this.gridDataSource.data.forEach((element) => {
+                if (!this.rowsSelection.includes(element.id)) {
+                    this.rowsSelection.push(element.id);
+                }
+            });
+        } else if (isCheckedRow) {
+            //using some Property to return true or false
+            !this.rowsSelection.some((x) => x == row.id)
+                ? this.rowsSelection.push(row.id)
+                : this.rowsSelection.forEach((element, index) => {
+                      if (element == row.id)
+                          this.rowsSelection.splice(index, 1);
+                  });
+        } else if (!isCheckedRow && !isCheckedAll) {
+            this.gridDataSource.data.forEach((elementSource) => {
+                this.rowsSelection.splice(
+                    this.rowsSelection.findIndex((x) => x == elementSource),
+                    1,
+                );
+            });
+        }
+
+        const actionGrid: ActionRowGrid = {
+            type: State.Check,
+            row: this.rowsSelection,
+        };
+        this.onCheckRow.next(actionGrid);
+    }
+
+    setSelection() {
+        //adding this function to select row when click on pagination if this before checked.
+        if (this.isShowBoxSelectAll)
+            this.rowsSelection.forEach((element) => {
+                if (this.gridDataSource.data.some((x) => x.id == element))
+                    this.selection.select(
+                        this.gridDataSource.data[
+                            this.gridDataSource.data.findIndex(
+                                (x) => x.id == element,
+                            )
+                        ],
+                    );
+            });
+    }
+
+    onFirstPage() {
+        this.paginator.firstPage();
+        this.changeDetectorRef.detectChanges();
+    }
+
+    onLastPage() {
+        this.paginator.lastPage();
+        this.changeDetectorRef.detectChanges();
+    }
+
+    onSelectPageIndex(pageIndex: number) {
+        this.paginator.pageIndex = pageIndex - 1;
+
+        const event: PageEvent = {
+            length: this.paginator.length,
+            pageIndex: this.paginator.pageIndex,
+            pageSize: this.paginator.pageSize,
+        };
+
+        this.paginator.page.next(event);
+    }
+}

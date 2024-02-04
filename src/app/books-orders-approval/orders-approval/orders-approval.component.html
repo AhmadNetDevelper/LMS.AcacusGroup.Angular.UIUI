@@ -1,0 +1,125 @@
+<mat-card>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutWrap="wrap">
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+          <div fxLayout="row" fxLayoutWrap="wrap">
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+              <form novalidate [formGroup]="UserEditControl">
+                <div fxLayout="row wrap">
+                  <div
+                    class="p-5"
+                    fxFlex.gt-sm="20"
+                    fxFlex.gt-xs="20"
+                    fxFlex="100"
+                  >
+                    <div class="input-group no-border">
+                      <mat-form-field>
+                        <input
+                          matInput
+                          id="searchInput"
+                          formControlName="searchInput"
+                          type="text"
+                          autocomplete="off"
+                          (ngModelChange)="applyFilter($event)"
+                          placeholder="{{ 'Search' }}"
+                        />
+                        <mat-icon
+                          matSuffix
+                          *ngIf="!UserEditControl.controls.searchInput.value"
+                        >
+                          search</mat-icon
+                        >
+                        <mat-icon
+                          matSuffix
+                          *ngIf="UserEditControl.controls.searchInput.value"
+                          title="Clear"
+                          (click)="clear($event)"
+                          >close</mat-icon
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div fxLayout="row wrap">
+        <div
+          class="p-10"
+          fxFlex.gt-sm="100"
+          fxFlex.gt-xs="100"
+          fxFlex="100"
+        ></div>
+        <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+          <div fxLayout="row wrap">
+            <div class="p-10" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <table
+                mat-table
+                appMatTableResponsive
+                [dataSource]="orderApprovalDataSource"
+                matSort
+                matSortStart="desc"
+              >
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>Id</th>
+                  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+  
+                <ng-container matColumnDef="bookName">
+                  <th mat-header-cell *matHeaderCellDef>book Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.bookName }}</td>
+                </ng-container>
+  
+                <ng-container matColumnDef="patroName">
+                  <th mat-header-cell *matHeaderCellDef>Patro Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.patroName }}</td>
+                </ng-container>
+       
+                <ng-container matColumnDef="checkoutDate">
+                  <th mat-header-cell *matHeaderCellDef>Checkout Date</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.checkoutDate }}
+                  </td>
+                </ng-container>
+  
+               <ng-container matColumnDef="Actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let element">
+                      <button
+                          mat-icon-button
+                          matTooltip="accept book order"
+                          color="warn"
+                          (click)="onApproveOrderBookClick(element)"
+                      >
+                          <mat-icon>check</mat-icon>
+                      </button>
+                  </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let emprow; columns: displayedColumns"
+                ></tr>
+              </table>
+  
+              <mat-paginator
+                #paginator
+                [length]="lengthData"
+                [pageSize]="pageSize"
+                [pageIndex]="paginationIndex"
+                [pageSizeOptions]="[5, 10, 20, 50]"
+                (page)="onPaginationClick($event)"
+                showFirstLastButtons
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

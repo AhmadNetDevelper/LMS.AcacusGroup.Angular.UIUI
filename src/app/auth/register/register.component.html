@@ -1,0 +1,239 @@
+<div
+    class="login-register"
+>
+    <div class="login-register-box">
+        <mat-card>
+            <mat-card-content>
+                <form [formGroup]="registerForm">
+                    <div fxLayout="row wrap">
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field style="width: 100%">
+                                <input
+                                    matInput
+                                    placeholder="{{ 'user Name' }}"
+                                    type="text"
+                                    [formControl]="
+                                        registerForm.controls['UserName']
+                                    "
+                                />
+                            </mat-form-field>
+                            <small
+                                *ngIf="
+                                    registerForm.controls['UserName'].hasError(
+                                        'required'
+                                    ) &&
+                                    registerForm.controls['UserName'].touched
+                                "
+                                class="text-danger support-text"
+                                >{{ 'MustIncludeUserName' }}</small
+                            >
+                        </div>
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field style="width: 100%">
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Email Address'
+                                    }}"
+                                    type="email"
+                                    [formControl]="
+                                        registerForm.controls['Email']
+                                    "
+                                />
+                            </mat-form-field>
+                            <small
+                                *ngIf="
+                                    registerForm.controls['Email'].hasError(
+                                        'required'
+                                    ) && registerForm.controls['Email'].touched
+                                "
+                                class="text-danger support-text"
+                                >{{
+                                    'MustIncludeEmailAddress'
+                                }}</small
+                            >
+                            <small
+                                *ngIf="
+                                    registerForm.controls['Email'].errors
+                                        ?.email &&
+                                    registerForm.controls['Email'].touched
+                                "
+                                class="text-danger support-text"
+                                >{{
+                                    'MustIncludeValidEmailAddress'
+                                }}</small
+                            >
+                        </div>
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field style="width: 100%">
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Phone Number'
+                                    }}"
+                                    type="text"
+                                    [formControl]="
+                                        registerForm.controls['PhoneNumber']
+                                    "
+                                />
+                            </mat-form-field>
+                            <small
+                                *ngIf="
+                                    registerForm.controls[
+                                        'PhoneNumber'
+                                    ].hasError('required') &&
+                                    registerForm.controls['PhoneNumber'].touched
+                                "
+                                class="text-danger support-text"
+                                >{{ 'MustIncludePhoneNo' }}</small
+                            >
+                        </div>
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field style="width: 100%">
+                                <input
+                                    matInput
+                                    [type]="
+                                        isHidePassword ? 'password' : 'text'
+                                    "
+                                    placeholder="{{ 'Password' }}"
+                                    [pattern]="passwordPattern"
+                                    [formControl]="
+                                        registerForm.controls['PasswordHash']
+                                    "
+                                />
+                                <mat-icon
+                                    matSuffix
+                                    (click)="isHidePassword = !isHidePassword"
+                                    class="link-hand"
+                                >
+                                    {{
+                                        isHidePassword
+                                            ? 'visibility_off'
+                                            : 'visibility'
+                                    }}</mat-icon
+                                >
+                            </mat-form-field>
+                            <small
+                                *ngIf="
+                                    registerForm.controls[
+                                        'PasswordHash'
+                                    ].hasError('required') &&
+                                    registerForm.controls['PasswordHash']
+                                        .touched
+                                "
+                                class="text-danger support-text"
+                                >{{ 'MustIncludePassword' }}</small
+                            >
+                            <small
+                                *ngIf="
+                                    registerForm.controls[
+                                        'PasswordHash'
+                                    ].hasError('pattern') &&
+                                    registerForm.controls['PasswordHash']
+                                        .touched
+                                "
+                                class="text-danger support-text"
+                                >{{
+                                    'PasswordConsistsNumbersAndLetters'
+                                }}</small
+                            >
+                        </div>
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            <mat-form-field style="width: 100%">
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Confirm Password'
+                                    }}"
+                                    [formControl]="
+                                        registerForm.controls['ConfirmPassword']
+                                    "
+                                    [type]="
+                                        isHidePasswordConfirm
+                                            ? 'password'
+                                            : 'text'
+                                    "
+                                />
+                                <mat-icon
+                                    matSuffix
+                                    (click)="
+                                        isHidePasswordConfirm = !isHidePasswordConfirm
+                                    "
+                                    class="link-hand"
+                                >
+                                    {{
+                                        isHidePasswordConfirm
+                                            ? 'visibility_off'
+                                            : 'visibility'
+                                    }}</mat-icon
+                                >
+                            </mat-form-field>
+                            <small
+                                *ngIf="
+                                    registerForm.controls[
+                                        'ConfirmPassword'
+                                    ].hasError('required') &&
+                                    registerForm.controls['ConfirmPassword']
+                                        .touched
+                                "
+                                class="text-danger support-text"
+                                >{{
+                                    'MustIncludeConfirmPassword'
+                                }}</small
+                            >
+                            <small
+                                *ngIf="
+                                    registerForm.controls['ConfirmPassword']
+                                        .value !==
+                                    registerForm.controls['PasswordHash'].value
+                                "
+                                class="text-danger support-text"
+                                >{{ 'PasswordsDonotMatch' }}</small
+                            >
+                        </div>
+
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            class="btn-block btn-lg m-t-20 m-b-20"
+                            type="submit"
+                            (click)="register()"
+                            [disabled]="
+                                !registerForm.valid ||
+                                registerForm.controls['ConfirmPassword']
+                                    .value !==
+                                    registerForm.controls['PasswordHash']
+                                        .value ||
+                                isInProgress
+                            "
+                        >
+                            {{ 'Create Account' }}
+                        </button>
+
+                        <div
+                            class="text-center"
+                            fxFlex.gt-sm="100"
+                            fxFlex.gt-xs="100"
+                            fxFlex="100"
+                        >
+                            <span
+                                >{{ 'Already Have Account' }}
+                                <a
+                                    (click)="loginRedirect()"
+                                    class="link text-info link-hand"
+                                >
+                                    {{ 'Login' }}</a
+                                >
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

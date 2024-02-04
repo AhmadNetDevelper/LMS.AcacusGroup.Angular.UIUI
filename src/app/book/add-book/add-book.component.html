@@ -1,0 +1,239 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <div fxLayout="row" fxLayoutWrap="wrap">
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                <form
+                    novalidate
+                    [formGroup]="frmAddNew"
+                    (ngSubmit)="onSubmit()"
+                >
+                    <div fxLayout="row wrap">
+                        <div
+                            class="p-12"
+                            fxFlex.gt-sm="100"
+                            fxFlex.gt-xs="100"
+                            fxFlex="100"
+                        >
+                            <ng-template>
+                                <mat-form-field style="width: 100%">
+                                    <input
+                                        matInput
+                                        placeholder="Id"
+                                        formControlName="Id"
+                                        type="text"
+                                    />
+                                </mat-form-field>
+                            </ng-template>
+                        </div>
+
+                        <div
+                            class="p-12"
+                            fxFlex.gt-sm="50"
+                            fxFlex.gt-xs="50"
+                            fxFlex="100"
+                        >
+                            <mat-form-field style="width: 100%">
+                                <mat-label>{{
+                                    'Title'
+                                }}</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Title'
+                                    }}"
+                                    formControlName="Title"
+                                    type="text"
+                                    autocomplete="off"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div
+                            class="p-12"
+                            fxFlex.gt-sm="50"
+                            fxFlex.gt-xs="50"
+                            fxFlex="100"
+                        >
+                            <mat-form-field style="width: 100%">
+                                <mat-label>{{
+                                    'Author'
+                                }}</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Author'
+                                    }}"
+                                    formControlName="Author"
+                                    type="text"
+                                    autocomplete="off"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div
+                            class="p-12"
+                            fxFlex.gt-sm="50"
+                            fxFlex.gt-xs="50"
+                            fxFlex="100"
+                        >
+                            <mat-form-field style="width: 100%">
+                                <mat-label>{{
+                                    'ISBN'
+                                }}</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'ISBN'
+                                    }}"
+                                    formControlName="ISBN"
+                                    type="text"
+                                    autocomplete="off"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div
+                            class="p-12"
+                            fxFlex.gt-sm="50"
+                            fxFlex.gt-xs="50"
+                            fxFlex="100"
+                        >
+                            <mat-form-field style="width: 100%">
+                                <mat-label>{{
+                                    'Genre'
+                                }}</mat-label>
+                                <input
+                                    matInput
+                                    placeholder="{{
+                                        'Genre'
+                                    }}"
+                                    formControlName="Genre"
+                                    type="text"
+                                    autocomplete="off"
+                                />
+                            </mat-form-field>
+                        </div>
+
+                        <div
+                        class="p-12"
+                        fxFlex.gt-sm="50"
+                        fxFlex.gt-xs="50"
+                        fxFlex="100"
+                    >
+                        <mat-form-field style="width: 100%">
+                            <mat-label>{{
+                                'PublishedYear'
+                            }}</mat-label>
+                            <input
+                                matInput
+                                placeholder="{{
+                                    'PublishedYear'
+                                }}"
+                                formControlName="PublishedYear"
+                                type="text"
+                                autocomplete="off"
+                            />
+                        </mat-form-field>
+                    </div>
+                    
+                    <div
+                    class="p-12"
+                    fxFlex.gt-sm="50"
+                    fxFlex.gt-xs="50"
+                    fxFlex="100"
+                >
+                    <mat-form-field style="width: 100%">
+                        <mat-label>{{
+                            'AvailableCopies'
+                        }}</mat-label>
+                        <input
+                            matInput
+                            placeholder="{{
+                                'AvailableCopies'
+                            }}"
+                            formControlName="AvailableCopies"
+                            type="text"
+                            autocomplete="off"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <div
+                    class="p-12"
+                    fxFlex.gt-sm="50"
+                    fxFlex.gt-xs="50"
+                    fxFlex="100"
+                >
+                    <mat-form-field style="width: 100%">
+                        <mat-label>{{
+                            'TotalCopies'
+                        }}</mat-label>
+                        <input
+                            matInput
+                            placeholder="{{
+                                'TotalCopies'
+                            }}"
+                            formControlName="TotalCopies"
+                            type="text"
+                            autocomplete="off"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <div
+                            class="p-10"
+                            fxFlex.gt-sm="15"
+                            fxFlex.gt-xs="15"
+                            fxFlex="100"
+                            [hidden]="frmAddNew.controls['Id'].value != 0"
+                        >
+                            <button
+                                mat-raised-button
+                                type="submit"
+                                color="primary"
+                                [disabled]="!frmAddNew.valid || isInProgress"
+                            >
+                                <mat-icon>add</mat-icon> {{ 'Add' }}
+                            </button>
+                        </div>
+                        <div
+                            class="p-10"
+                            fxFlex.gt-sm="15"
+                            fxFlex.gt-xs="15"
+                            fxFlex="100"
+                        >
+                            <button
+                                mat-raised-button
+                                [mat-dialog-close]="false"
+                                color="warn"
+                            >
+                                <mat-icon>close</mat-icon>
+                                {{ 'Close' }}
+                            </button>
+                        </div>
+
+                        
+
+                        <div
+                            class="p-10"
+                            fxFlex.gt-sm="15"
+                            fxFlex.gt-xs="15"
+                            fxFlex="100"
+                            [hidden]="frmAddNew.controls['Id'].value == 0"
+                        >
+                            <button
+                                mat-raised-button
+                                type="submit"
+                                color="primary"
+                                [disabled]="!frmAddNew.valid || isInProgress"
+                            >
+                                <mat-icon>save</mat-icon>
+                                {{ 'Save' }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
